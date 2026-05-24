@@ -1,61 +1,248 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pro Elite Tracking App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dawly Coaching</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Ubuntu:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-base: #050505; --bg-surface: #121217; --accent: #ff2a5f; --text-primary: #fff; --text-secondary: #8e8e9e; --radius-lg: 24px; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', 'Cairo', sans-serif; }
-        body { background-color: var(--bg-base); color: var(--text-primary); padding: 20px; padding-bottom: 120px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .header-card { background: var(--bg-surface); padding: 25px; border-radius: var(--radius-lg); border-left: 4px solid var(--accent); margin-bottom: 25px; }
-        .client-name { font-size: 2.2rem; font-weight: 900; text-transform: uppercase; }
-        .booking-card { background: linear-gradient(145deg, #1e1e28, #16161d); border: 1px solid rgba(255,42,95,0.3); border-radius: 16px; padding: 20px; margin-bottom: 30px; text-align: center; }
-        .booking-card input { background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; margin-bottom: 15px; width: 100%; max-width: 300px; }
-        .booking-card button { background: var(--accent); color: #fff; border: none; padding: 12px 25px; border-radius: 20px; font-weight: bold; cursor: pointer; }
-        .week-switcher { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 20px; }
-        .week-btn { background: var(--bg-surface); color: var(--text-secondary); padding: 12px 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); font-weight: bold; cursor: pointer; }
-        .week-btn.active { background: var(--accent); color: #fff; }
-        .day-view { display: none; }
-        .day-view.active { display: block; }
-        .day-header { font-size: 1.5rem; font-weight: 900; margin: 25px 0 15px 0; border-bottom: 1px solid #222; padding-bottom: 5px; }
-        .ex-card { background: var(--bg-surface); padding: 20px; border-radius: var(--radius-lg); margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
-        .sub-name { font-weight: 700; font-size: 1.1rem; color: #fff; margin-bottom: 5px; }
-        .sub-meta { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px; }
-        .sets-grid { display: grid; gap: 10px; }
-        .set-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; }
-        .set-row.completed { border-left: 4px solid #00ff88; background: rgba(0,255,136,0.03); }
-        .input-wrap { display: flex; flex-direction: column; align-items: center; }
-        .input-wrap label { font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 2px; }
-        .input-wrap input { width: 70px; background: #000; color: #fff; border: 1px solid #333; padding: 6px; text-align: center; border-radius: 6px; font-weight: bold; }
-        .check-btn { width: 35px; height: 35px; background: #222; border: none; color: #555; border-radius: 8px; cursor: pointer; }
-        .set-row.completed .check-btn { background: #00ff88; color: #000; }
-        .tech-hint { font-size: 0.85rem; color: #ffb800; background: rgba(255,184,0,0.05); padding: 8px; border-radius: 6px; margin-bottom: 10px; text-align: right; direction: rtl; }
-        .yt-btn { color: #ff0000; text-decoration: none; font-size: 1.2rem; margin-left: 10px; }
-        .rest-card { background: #121217; padding: 40px; border-radius: 24px; text-align: center; border: 1px dashed #333; }
-        .rest-card i { font-size: 3rem; color: var(--accent); margin-bottom: 15px; }
+        /* CSS Reset & Variables */
+        :root {
+            --space-black: #040407;
+            --plasma-blue: #00f0ff;
+            --neon-pink: #ff0055;
+            --toxic-green: #39ff14;
+            --youtube-red: #ff0000;
+            --glass-panel: rgba(14, 14, 22, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --hud-text: #e2e8f0;
+           
+            /* الخط الإنجليزي بمواصفات الـ B2 الفخمة */
+            --b2-font: 'Orbitron', 'Ubuntu', system-ui, sans-serif;
+            --sys-font: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+       
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
+       
+        body {
+            background-color: var(--space-black);
+            color: var(--hud-text);
+            font-family: var(--sys-font);
+            padding: 24px;
+            padding-bottom: 120px;
+            overflow-x: hidden;
+            position: relative;
+            z-index: 1;
+        }
+       
+        /* The Aurora Engine - Animated Background */
+        .aurora-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background: var(--space-black); overflow: hidden; pointer-events: none;
+        }
+        .aurora-bg::before, .aurora-bg::after {
+            content: ''; position: absolute; border-radius: 50%; filter: blur(95px);
+            animation: floatPlasma 18s infinite alternate ease-in-out; opacity: 0.38;
+        }
+        .aurora-bg::before {
+            width: 65vw; height: 65vh; background: var(--neon-pink); top: -15%; left: -15%;
+        }
+        .aurora-bg::after {
+            width: 55vw; height: 55vh; background: var(--plasma-blue); bottom: -15%; right: -15%;
+            animation-delay: -9s;
+        }
+        @keyframes floatPlasma { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(12vw, 12vh) scale(1.25); } }
+
+        .app-container { max-width: 900px; margin: 0 auto; }
+
+        /* Quantum Glass Cards */
+        .glass-card {
+            background: var(--glass-panel);
+            backdrop-filter: blur(35px) saturate(160%);
+            -webkit-backdrop-filter: blur(35px) saturate(160%);
+            border-radius: 28px;
+            box-shadow: inset 0 0 0 1px var(--glass-border), 0 25px 55px rgba(0, 0, 0, 0.75);
+            position: relative;
+            overflow: hidden;
+        }
+       
+        .glass-card::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(rgba(255,255,255,0.01) 50%, transparent 50%);
+            background-size: 100% 4px; pointer-events: none; z-index: 0; opacity: 0.4;
+        }
+
+        .header { text-align: center; margin-bottom: 40px; padding: 42px 24px; }
+        .header h1 {
+            font-family: var(--b2-font);
+            font-size: 3.2rem; font-weight: 900;
+            background: linear-gradient(90deg, var(--plasma-blue), var(--neon-pink));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: 4px; margin-bottom: 20px; text-shadow: 0 0 45px rgba(255, 0, 85, 0.35);
+            position: relative; z-index: 2;
+        }
+        .header-meta {
+            display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; position: relative; z-index: 2;
+        }
+        .header-meta span {
+            font-family: var(--b2-font);
+            background: rgba(0, 0, 0, 0.55); padding: 10px 22px; border-radius: 12px;
+            border: 1px solid var(--glass-border); color: #fff; font-weight: 900;
+            letter-spacing: 1.5px; font-size: 0.85rem; text-transform: uppercase;
+        }
+
+        /* Notes Section */
+        .notes-section {
+            padding: 28px; margin-bottom: 40px; border-left: 4px solid var(--plasma-blue);
+            border-radius: 12px 28px 28px 12px;
+        }
+        .notes-section h3 { font-family: var(--b2-font); color: var(--plasma-blue); margin-bottom: 12px; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; }
+        .notes-section p { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; position: relative; z-index: 2; }
+
+        /* Futuristic Tabs */
+        .week-tabs {
+            display: flex; gap: 16px; margin-bottom: 40px; overflow-x: auto; padding-bottom: 15px;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .week-tabs::-webkit-scrollbar { display: none; }
+        .week-tab {
+            font-family: var(--b2-font);
+            flex: 0 0 auto; min-width: 140px; text-align: center; padding: 18px 24px; cursor: pointer;
+            font-weight: 900; font-size: 1rem; color: #94a3b8; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(10, 10, 15, 0.6); border-radius: 16px; border: 1px solid var(--glass-border);
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+        .week-tab:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        .week-tab.active {
+            background: var(--neon-pink); color: #fff; border-color: var(--neon-pink);
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.45); transform: translateY(-4px) scale(1.02);
+        }
+
+        /* Day Layouts */
+        .day-section { display: none; margin-bottom: 50px; animation: holographicReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px) scale(0.98); }
+        .day-section.active { display: block; }
+        @keyframes holographicReveal { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .day-title {
+            font-family: var(--b2-font);
+            font-size: 2.1rem; font-weight: 900; color: #fff; margin-bottom: 35px;
+            display: flex; align-items: center; gap: 20px; text-transform: uppercase; letter-spacing: 2px;
+        }
+        .day-title::after {
+            content: ''; flex: 1; height: 2px; background: linear-gradient(90deg, var(--plasma-blue), transparent);
+        }
+
+        .rest-day { text-align: center; padding: 80px 24px; border: 1px dashed rgba(0, 240, 255, 0.3); }
+        .rest-day span.icon { font-size: 5rem; margin-bottom: 25px; display: block; filter: drop-shadow(0 0 25px var(--plasma-blue)); }
+        .rest-day h2 { font-family: var(--b2-font); color: var(--plasma-blue); margin-bottom: 15px; font-weight: 900; letter-spacing: 3px; font-size: 2rem; }
+
+        /* Exercise Cards */
+        .exercise-group {
+            padding: 30px; margin-bottom: 35px; border-radius: 28px;
+            border-left: 6px solid var(--neon-pink);
+        }
+       
+        .group-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; position: relative; z-index: 2; }
+        .group-title { font-family: var(--b2-font); font-size: 1.65rem; font-weight: 900; color: #fff; letter-spacing: 0.5px; }
+       
+        .tech-badge {
+            font-family: var(--b2-font);
+            background: rgba(255, 0, 85, 0.16); color: #fff; padding: 8px 18px;
+            border-radius: 8px; font-size: 0.85rem; font-weight: 900; text-transform: uppercase;
+            border: 1px solid rgba(255, 0, 85, 0.45); box-shadow: 0 0 20px rgba(255, 0, 85, 0.2);
+            letter-spacing: 1px;
+        }
+       
+        /* شرح التكنيك باللغة العربية */
+        .tech-explain-box {
+            font-size: 1rem; color: #fbbf24; background: rgba(251, 191, 36, 0.05);
+            padding: 12px 18px; border-radius: 12px; border-right: 4px solid #fbbf24;
+            margin-bottom: 20px; font-weight: bold; text-align: right; direction: rtl;
+            position: relative; z-index: 2; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .sub-exercise {
+            background: rgba(0, 0, 0, 0.4); border-radius: 20px; padding: 25px; margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03); position: relative; z-index: 2;
+        }
+        .sub-exercise:last-child { margin-bottom: 0; }
+
+        .sub-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .sub-name { font-family: var(--b2-font); font-weight: 900; font-size: 1.3rem; color: #f8fafc; display: flex; align-items: center; gap: 12px; }
+        .sub-note { font-size: 0.95rem; color: var(--plasma-blue); margin-top: 12px; font-weight: 600; background: rgba(0, 240, 255, 0.05); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--plasma-blue); }
+       
+        /* زر لينك الفيديو الفاجر بلون يوتيوب الأحمر */
+        .vid-btn {
+            font-family: var(--b2-font);
+            background: var(--youtube-red); color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 12px;
+            font-size: 0.85rem; font-weight: 900; display: inline-flex; align-items: center; gap: 8px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid transparent; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .vid-btn:hover { background: #b30000; box-shadow: 0 0 25px rgba(255, 0, 0, 0.6); transform: translateY(-2px); }
+
+        .meta-row {
+            font-family: var(--b2-font);
+            display: inline-flex; gap: 30px; font-size: 0.95rem; color: #94a3b8; margin-bottom: 25px;
+            background: rgba(0,0,0,0.4); padding: 14px 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.02);
+        }
+        .meta-row span strong { color: var(--plasma-blue); font-weight: 900; margin-left: 8px; font-size: 1.15rem; text-shadow: 0 0 10px rgba(0, 240, 255, 0.3); }
+
+        /* Cyber HUD Inputs & Sets */
+        .sets-container { display: grid; gap: 16px; }
+        .set-row {
+            display: flex; align-items: center; background: rgba(0, 0, 0, 0.3); padding: 16px 24px;
+            border-radius: 18px; gap: 24px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.03); position: relative; overflow: hidden;
+        }
+        .set-row::before {
+            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 0;
+            background: linear-gradient(90deg, rgba(57, 255, 20, 0.1), transparent);
+            transition: width 0.5s ease; z-index: 0;
+        }
+        .set-row.completed { border-color: rgba(57, 255, 20, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .set-row.completed::before { width: 100%; }
+       
+        .set-num { font-family: var(--b2-font); font-weight: 900; color: #475569; width: 45px; font-size: 1.4rem; position: relative; z-index: 1; }
+        .set-row.completed .set-num { color: var(--toxic-green); text-shadow: 0 0 15px rgba(57, 255, 20, 0.4); }
+       
+        .input-group { display: flex; align-items: center; gap: 12px; flex: 1; justify-content: center; position: relative; z-index: 1; }
+        .input-group label { font-family: var(--b2-font); color: #475569; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        .input-group input {
+            font-family: var(--b2-font);
+            background: rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 14px 10px;
+            border-radius: 12px; width: 90px; text-align: center; font-weight: 900; font-size: 1.35rem;
+            outline: none; transition: all 0.3s ease; box-shadow: inset 0 4px 10px rgba(0,0,0,0.6);
+            letter-spacing: 1px;
+        }
+        .input-group input:focus { border-color: var(--plasma-blue); box-shadow: 0 0 20px rgba(0, 240, 255, 0.3), inset 0 4px 10px rgba(0,0,0,0.6); }
+        .set-row.completed input { border-color: rgba(57, 255, 20, 0.4); color: var(--toxic-green); text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
+       
+        /* The Reactor Core Check Button */
+        .check-btn {
+            margin-left: auto; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); color: #475569;
+            width: 50px; height: 50px; cursor: pointer; display: flex; position: relative; z-index: 1;
+            align-items: center; justify-content: center; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            font-size: 20px; font-weight: 900;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+        .check-btn:hover { background: rgba(255,255,255,0.05); color: #fff; transform: scale(1.1) rotate(15deg); }
+        .check-btn.checked {
+            background: var(--toxic-green); border-color: var(--toxic-green); color: #000;
+            box-shadow: 0 0 35px rgba(57, 255, 20, 0.6); transform: scale(1.15) rotate(90deg);
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-card">
-            <div class="client-name" id="uiClientName">Loading Plan...</div>
-            <div id="uiMeta"></div>
-            <div class="notes-box" id="uiNotes"></div>
+    <div class="aurora-bg"></div>
+    <div class="app-container">
+        <div class="header glass-card">
+            <h1>DAWLY COACHING</h1>
+            <div class="header-meta" id="uiMeta"></div>
         </div>
-
-        <div class="booking-card">
-            <h3><i class="fas fa-calendar-check"></i> Book Personal Session</h3>
-            <input type="datetime-local" id="sessionDateTime">
-            <br><button onclick="bookSession()">Confirm Appointment</button>
-        </div>
-
-        <div class="week-switcher" id="weekSwitcher"></div>
+        <div id="uiNotes"></div>
+        <div class="week-tabs" id="weekTabs"></div>
         <div id="dynamicDaysContainer"></div>
     </div>
 
@@ -63,6 +250,9 @@
         const firebaseConfig = { databaseURL: "https://procoachsystem-92c45-default-rtdb.firebaseio.com" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+
+        // قاموس شروحات التكنيكات الممرر من بايثون مباشرة
+        const techExplanations = {"Emom": "تعمل العدات المطلوبه وليك بحد اقصي دقيقه لو عملتها قبلهم تريح باقي الدقيقه وهتعيد تاني المجموعه بعد الدقيقه", "Partial reps": "ف اخر المجموعه بعد الفشل العضلي تعمل ٤ انصاص عدات للفشل", "Rest-Pause": "تختار وزن تقيل وتوصل لـ فشل عند 6–8 reps. تستريح 10–15 ثانية، وتكمل 2–3 reps تاني", "Pause set Stability": "تثبت تحت ف الضغط بعد ما تخلص المجموعة ٣٠ث بوزن خفيف او من غير", "Drop set": "تعمل العدات للفشل العضلي بعدها تقلل ٣٠٪؜ من الوزن وتكمل للفشل وبعدها تقلل ٣٠٪؜ وتكمل للفشل", "Super set": "تمارين تخلصها وتعمل الي بعدها علي طول بدون راحة", "Tri-set": "3 تمارين ورا بعض بدون راحة", "Circuit": "مجموعة تمارين ورا بعض بدون راحة بنظام الدائرة", "2sec pause under tension": "تثبت ف اخر المدي الحركي ثانيتين ف كل عده وتكمل عادي", "Overload": "تدي العضلة وزن أعلى من المعتاد بحركة جزئية (نص او ربع) بحمل تقيل، بعدين حركة كاملة", "Complex set": "تعمل مجموعة وزن تقيل بعدها مباشرة حركة Explosive خفيفة (Jump Squat)", "21s Method": "تقسم المجموعة 3 أجزاء: 7 عدات نصف أول، 7 عدات نصف ثاني، 7 عدات كاملة", "Half & full range": "تعمل نصف حركة زيادة في نفس التكرار. مثال: تطلع للنص، تنزل شوية، تطلع كامل", "Pre fatigue": "تعمل ثبات بوزن لمده ١ده وبعدين تعمل المجموعه الاساسيه", "Post fatigue": "تعمل المجموعه الاساسيه وبعدين تعمل ثبات بوزن لمده ١ده", "Tempo Concentric": "تاخد العده الايجابيه ف ٣ ثواني براحه وتنزل عادي", "Tempo Eccentric": "تاخد العده السلبيه ف ٣ ثواني براحه وتطلع عادي", "Giant Sets": "3–4 تمارين لنفس العضلة ورا بعض بدون راحة", "Forced Reps": "بعد ما توصل للفشل حد يساعدك بس تكمل 2–3 عدات", "Hold stretch 3 sec": "تثبت ف العده السلبيه ٣ ثواني وتطلع عادي", "Hold concentric 3 sec": "تثبت ف العده الايجابيه ٣ ثواني وتنزل عادي", "Contrasting Loads": "مجموعة تقيلة جدًا (5–6 reps) بعدها على طول مجموعة خفيفة بوزن أقل (12–15 reps)", "FST7": "تعمل 7 مجموعات لنفس التمرين راحة بين كل مجموعة 30–45 ثانية فقط"};
 
         const urlParams = new URLSearchParams(window.location.search);
         let clientParam = urlParams.get('client');
@@ -72,84 +262,102 @@
         const safeClient = clientParam ? clientParam.replace(" ", "_").replace(".", "") : "Unknown";
         const clientRef = db.ref('clients/' + safeClient);
 
-        let activeWeek = 1;
-
         clientRef.child('plan').once('value').then(snapshot => {
             const plan = snapshot.val();
             if(!plan) {
-                document.getElementById('uiClientName').innerText = "No Plan Found on Cloud Server.";
+                document.getElementById('uiMeta').innerHTML = "<span>DATA RECORDS EMPTY</span>";
                 return;
             }
 
-            document.getElementById('uiClientName').innerText = plan.meta.client;
-            document.getElementById('uiMeta').innerHTML = `<span style="color:#ff2a5f">Goal:</span> ${plan.meta.goal} | <span style="color:#ff2a5f">Phase:</span> ${plan.meta.phase}`;
-            if(plan.meta.notes) document.getElementById('uiNotes').innerHTML = `<b>Notes:</b><br>${plan.meta.notes.replace(/\n/g, '<br>')}`;
+            document.getElementById('uiMeta').innerHTML = `
+                ${plan.meta.client ? `<span>ID: ${plan.meta.client}</span>` : ""}
+                ${plan.meta.phase ? `<span>PHASE: ${plan.meta.phase}</span>` : ""}
+                ${plan.meta.goal ? `<span>OBJ: ${plan.meta.goal}</span>` : ""}
+            `;
+           
+            if(plan.meta.notes) {
+                document.getElementById('uiNotes').innerHTML = `
+                <div class="notes-section glass-card">
+                    <h3>[ SYSTEM DIRECTIVES ]</h3>
+                    <p>${plan.meta.notes.replace(/\n/g, '<br>')}</p>
+                </div>`;
+            }
 
-            const switcher = document.getElementById('weekSwitcher');
+            const switcher = document.getElementById('weekTabs');
             for(let w=1; w<=plan.meta.weeks; w++) {
-                switcher.innerHTML += `<button class="week-btn ${w===1?'active':''}" id="wbtn_${w}" onclick="switchWeek(${w})">WEEK ${w}</button>`;
+                switcher.innerHTML += `<div class="week-tab" id="wbtn_${w}" onclick="switchWeek(${w})">CYCLE 0${w}</div>`;
             }
 
             const container = document.getElementById('dynamicDaysContainer');
             for(let w=1; w<=plan.meta.weeks; w++) {
-                // قراءة كألف مصفوفة مرتبة لمنع اختلال الـ dayIdx تماماً ومطابقته للـ Dashboard
                 if (plan.days && Array.isArray(plan.days)) {
                     plan.days.forEach((dayObj, dayIdx) => {
                         let dayTitle = dayObj.day_title;
                         let exercises = dayObj.exercises || [];
-                        
-                        let isVisible = (w === 1 && dayIdx === 0) ? 'block' : 'none';
+                       
                         let dayDiv = document.createElement('div');
-                        dayDiv.className = `day-view wview_${w}`;
+                        dayDiv.className = `day-section wview_${w}`;
                         dayDiv.id = `view_w${w}_d${dayIdx}`;
-                        dayDiv.style.display = isVisible;
-                        
-                        let header = document.createElement('h2');
-                        header.className = "day-header";
-                        header.innerText = dayTitle;
-                        dayDiv.appendChild(header);
+                       
+                        dayDiv.innerHTML = `<div class="day-title">${dayTitle}</div>`;
 
                         if(dayTitle.toLowerCase().includes('rest') || exercises.length === 0) {
-                            dayDiv.innerHTML += `<div class="rest-card"><i class="fas fa-battery-full"></i><h2>REST DAY</h2><p>Recovery mode activated.</p></div>`;
+                            dayDiv.innerHTML += `
+                            <div class="rest-day glass-card">
+                                <span class="icon">🧬</span>
+                                <h2>CELLULAR REGENERATION</h2>
+                                <p>System dictates absolute physical rest. Do not engage.</p>
+                            </div>`;
                         } else {
                             let merged = mergeExercises(exercises);
                             let exSeq = 1;
                             merged.forEach(ex => {
                                 let card = document.createElement('div');
-                                card.className = "ex-card";
-                                
-                                let titleRow = `<div class="ex-title-row"><div class="ex-title">${exSeq}. ${ex.exercise}</div>`;
-                                if(ex.technique !== "Normal") titleRow += `<div class="tech-pill">${ex.technique}</div>`;
-                                titleRow += `</div>`;
-                                card.innerHTML += titleRow;
+                                card.className = "exercise-group glass-card";
+                               
+                                let titleHtml = `<div class="group-header">
+                                    <div class="group-title">[${exSeq}] ${ex.exercise}</div>
+                                    ${ex.technique !== 'Normal' ? `<div class="tech-badge">${ex.technique}</div>` : ''}
+                                </div>`;
+                                card.innerHTML += titleHtml;
+
+                                // طباعة شرح التكنيك العربي إذا وجد وكان مختلفاً عن المعتاد
+                                if(ex.technique !== 'Normal' && techExplanations[ex.technique]) {
+                                    card.innerHTML += `<div class="tech-explain-box">💡 الكابتن يوجه: ${techExplanations[ex.technique]}</div>`;
+                                }
 
                                 let subExs = ex.sub_exercises || [ex];
                                 subExs.forEach((sub, subIdx) => {
                                     let subDiv = document.createElement('div');
-                                    subDiv.style.marginTop = "15px";
-                                    let subTitle = `<div class="sub-name">${sub.exercise}`;
-                                    if(sub.link) subTitle += `<a href="${sub.link}" target="_blank" class="yt-btn"><i class="fab fa-youtube"></i></a>`;
-                                    subTitle += `</div>`;
-                                    card.innerHTML += subTitle;
-                                    if(sub.note) card.innerHTML += `<div style="color:#38bdf8;font-size:0.85rem;margin-bottom:5px;">Note: ${sub.note}</div>`;
-                                    card.innerHTML += `<div class="sub-meta">Target: <b>${sub.sets}</b> | Rest: <b>${sub.rest}</b></div>`;
+                                    subDiv.className = "sub-exercise";
+                                   
+                                    let subHeader = `<div class="sub-header"><div>`;
+                                    if(ex.is_merged) subHeader += `<div class="sub-name">⚡ ${sub.exercise}</div>`;
+                                    if(sub.note) subHeader += `<div class="sub-note">⚠️ ${sub.note}</div>`;
+                                    subHeader += `</div>`;
+                                   
+                                    if(sub.link) subHeader += `<a href="${sub.link}" target="_blank" class="vid-btn">▶ YouTube Link</a>`;
+                                    subHeader += `</div>`;
+                                   
+                                    subDiv.innerHTML += subHeader;
+                                    subDiv.innerHTML += `<div class="meta-row"><span>TARGET: <strong>${sub.sets}</strong></span><span>REST: <strong>${sub.rest}</strong></span></div>`;
 
                                     let numSets = parseSets(sub.sets);
                                     let grid = document.createElement('div');
-                                    grid.className = "sets-grid";
+                                    grid.className = "sets-container";
                                     for(let s=1; s<=numSets; s++) {
                                         let inpBase = `w${w}_d${dayIdx}_e${exSeq}_s${subIdx}_set${s}`;
                                         grid.innerHTML += `
                                             <div class="set-row" id="row_${inpBase}">
-                                                <span>Set ${s}</span>
-                                                <div class="input-wrap"><label>KG</label><input type="text" id="w_${inpBase}" onchange="sendCloud('${inpBase}')"></div>
-                                                <div class="input-wrap"><label>Reps</label><input type="text" id="r_${inpBase}" onchange="sendCloud('${inpBase}')"></div>
-                                                <button class="check-btn" id="chk_${inpBase}" onclick="clickCheck('${inpBase}')"><i class="fas fa-check"></i></button>
+                                                <span class="set-num">0${s}</span>
+                                                <div class="input-group"><label>LOAD</label><input type="number" placeholder="-" id="w_${inpBase}" onchange="sendCloud('${inpBase}')"></div>
+                                                <div class="input-group"><label>REPS</label><input type="number" placeholder="-" id="r_${inpBase}" onchange="sendCloud('${inpBase}')"></div>
+                                                <button class="check-btn" id="chk_${inpBase}" onclick="clickCheck('${inpBase}')">✔</button>
                                             </div>`;
                                     }
-                                    card.appendChild(grid);
+                                    subDiv.appendChild(grid);
+                                    card.appendChild(subDiv);
                                 });
-
                                 dayDiv.appendChild(card);
                                 exSeq++;
                             });
@@ -158,6 +366,8 @@
                     });
                 }
             }
+           
+            setTimeout(() => switchWeek(1), 100);
             loadLiveProgress();
         });
 
@@ -166,16 +376,18 @@
             let i = 0;
             while(i < exs.length) {
                 let ex = exs[i];
-                if(["Super set", "Tri-set", "Circuit", "Giant Sets"].includes(ex.technique)) {
-                    let size = ex.technique === "Tri-set" ? 3 : 2;
-                    if(ex.technique === "Circuit") size = 99;
+                if(["Super set", "Tri-set", "Circuit", "Giant Sets", "Complex set", "Contrasting Loads"].includes(ex.technique)) {
+                    let size = 99;
+                    if (["Super set", "Contrasting Loads", "Complex set"].includes(ex.technique)) size = 2;
+                    else if (ex.technique === "Tri-set") size = 3;
+                   
                     let group = [ex];
                     let j = i + 1;
                     while(j < exs.length && exs[j].technique === ex.technique && group.length < size) {
                         group.push(exs[j]); j++;
                     }
                     if(group.length > 1) {
-                        merged.push({ exercise: group.map(g=>g.exercise).join(" x "), technique: ex.technique, sub_exercises: group });
+                        merged.push({ exercise: group.map(g=>g.exercise).join(" x "), technique: ex.technique, is_merged: true, sub_exercises: group });
                     } else { merged.push(ex); }
                     i = j;
                 } else { merged.push(ex); i++; }
@@ -185,15 +397,32 @@
 
         function parseSets(str) {
             let s = String(str).toLowerCase().replace(/\s/g,'');
-            if(s.includes('x')) return parseInt(s.split('x')[0]) || 3;
-            return parseInt(s) || 3;
+            if(s.includes('x')) {
+                let val = parseInt(s.split('x')[0]);
+                return isNaN(val) ? 1 : val;
+            }
+            let val = parseInt(s);
+            return isNaN(val) ? 1 : val;
         }
 
         function switchWeek(w) {
-            activeWeek = w;
-            document.querySelectorAll('.week-btn').forEach((b,i)=>b.classList.toggle('active', i===(w-1)));
-            document.querySelectorAll('.day-view').forEach(d=>d.style.display='none');
-            document.querySelectorAll(`.wview_${w}`).forEach(d=>d.style.display='block');
+            let tabs = document.getElementById('weekTabs').children;
+            for(let i=0; i<tabs.length; i++) tabs[i].classList.remove('active');
+            let targetTab = document.getElementById('wbtn_' + w);
+            if(targetTab) targetTab.classList.add('active');
+           
+            document.querySelectorAll('.day-section').forEach(d => {
+                d.classList.remove('active');
+                setTimeout(() => d.style.display = 'none', 400);
+            });
+           
+            setTimeout(() => {
+                document.querySelectorAll(`.wview_${w}`).forEach(d => {
+                    d.style.display = 'block';
+                    void d.offsetWidth;
+                    d.classList.add('active');
+                });
+            }, 410);
         }
 
         function sendCloud(idBase) {
@@ -204,16 +433,18 @@
         }
 
         function clickCheck(idBase) {
+            let btn = document.getElementById('chk_' + idBase);
             let row = document.getElementById('row_' + idBase);
-            row.classList.toggle('completed');
-            clientRef.child('checks/' + idBase).set(row.classList.contains('completed'));
-        }
-
-        function bookSession() {
-            let dt = document.getElementById('sessionDateTime').value;
-            if(!dt) return alert("Select date/time");
-            clientRef.child('bookings').push({ datetime: dt, status: 'Pending' });
-            alert("Appointment sent to Coach dashboard!");
+            let isChecked = !btn.classList.contains('checked');
+           
+            if (isChecked) {
+                btn.classList.add('checked');
+                row.classList.add('completed');
+            } else {
+                btn.classList.remove('checked');
+                row.classList.remove('completed');
+            }
+            clientRef.child('checks/' + idBase).set(isChecked);
         }
 
         function loadLiveProgress() {
@@ -228,8 +459,17 @@
                 }
                 if(d.checks) {
                     for(let [id, val] of Object.entries(d.checks)) {
+                        let btn = document.getElementById('chk_' + id);
                         let row = document.getElementById('row_' + id);
-                        if(row) row.classList.toggle('completed', val);
+                        if(btn && row) {
+                            if(val) {
+                                btn.classList.add('checked');
+                                row.classList.add('completed');
+                            } else {
+                                btn.classList.remove('checked');
+                                row.classList.remove('completed');
+                            }
+                        }
                     }
                 }
             });
